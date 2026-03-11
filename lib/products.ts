@@ -17,7 +17,13 @@ export interface Product {
 }
 
 export async function getAllProducts(): Promise<Product[]> {
-  const res = await fetch('/api/products');
+  const baseUrl = typeof window !== 'undefined' 
+    ? '' // Client-side: use relative URL
+    : process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` // Production: use Vercel URL
+      : 'http://localhost:3000'; // Development: fallback to localhost
+  
+  const res = await fetch(`${baseUrl}/api/products`);
   if (!res.ok) {
     throw new Error('Failed to fetch products');
   }
@@ -30,7 +36,14 @@ export async function getProductById(id: string): Promise<Product | null> {
   if (!id) {
     return null;
   }
-  const res = await fetch(`/api/products?id=${encodeURIComponent(id)}`);
+  
+  const baseUrl = typeof window !== 'undefined' 
+    ? '' // Client-side: use relative URL
+    : process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` // Production: use Vercel URL
+      : 'http://localhost:3000'; // Development: fallback to localhost
+  
+  const res = await fetch(`${baseUrl}/api/products?id=${encodeURIComponent(id)}`);
   if (!res.ok) {
     throw new Error('Failed to fetch product');
   }
