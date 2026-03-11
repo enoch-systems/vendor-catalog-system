@@ -52,11 +52,11 @@ export const updateSocialLinks = async () => {
 export const updatePaymentMethods = async () => {
   await updateSettings({
     payment_methods: {
-      stripe: true,
-      paypal: true,
-      bank_transfer: true,
-      card: true,
-      mobile_money: true
+      stripe: 'enabled',
+      paypal: 'enabled',
+      bank_transfer: 'enabled',
+      card: 'enabled',
+      mobile_money: 'enabled'
     }
   });
 };
@@ -138,11 +138,11 @@ export const updateAllSettings = async () => {
       whatsapp: '+234 (0) 123 456 7890'
     },
     payment_methods: {
-      stripe: true,
-      paypal: true,
-      bank_transfer: true,
-      card: true,
-      mobile_money: true
+      stripe: 'enabled',
+      paypal: 'enabled',
+      bank_transfer: 'enabled',
+      card: 'enabled',
+      mobile_money: 'enabled'
     },
     terms_of_service: 'Your terms of service text here...',
     privacy_policy: 'Your privacy policy text here...',

@@ -164,7 +164,7 @@ const transitionVariants = {
 const Accessories = () => {
     const { addToCart } = useCart()
     const { profileDropdownOpen } = useUI()
-    const [addedToCart, setAddedToCart] = useState<Set<number>>(new Set())
+    const [addedToCart, setAddedToCart] = useState<Set<string>>(new Set())
     const [searchQuery, setSearchQuery] = useState('')
     const searchWrapperRef = useRef<HTMLDivElement>(null)
     const [resultsStyle, setResultsStyle] = useState<{top: number; left: number; width: number} | null>(null)
@@ -197,7 +197,7 @@ const Accessories = () => {
 
     const handleAddToCart = (product: typeof accessoriesProducts[0]) => {
         addToCart({
-            id: product.id,
+            id: product.id.toString(),
             name: product.name,
             price: product.price,
             originalPrice: product.originalPrice,
@@ -206,13 +206,13 @@ const Accessories = () => {
         })
         
         // Show success feedback
-        setAddedToCart(prev => new Set([...prev, product.id]))
+        setAddedToCart(prev => new Set([...prev, product.id.toString()]))
         
         // Remove feedback after 1 second
         setTimeout(() => {
             setAddedToCart(prev => {
                 const newSet = new Set(prev)
-                newSet.delete(product.id)
+                newSet.delete(product.id.toString())
                 return newSet
             })
         }, 1000)
@@ -338,13 +338,13 @@ const Accessories = () => {
                                             {/* Add to Cart Button */}
                                             <Button 
                                                 className={`w-full text-xs sm:text-sm py-1.5 sm:py-2 transition-colors ${
-                                                    addedToCart.has(product.id)
+                                                    addedToCart.has(product.id.toString())
                                                         ? 'bg-green-500 text-white hover:bg-green-600'
                                                         : 'bg-gray-100 text-gray-900 hover:bg-gray-200 border border-gray-300'
                                                 }`}
                                                 onClick={() => handleAddToCart(product)}
                                             >
-                                                {addedToCart.has(product.id) ? 'Added!' : 'Add to Cart'}
+                                                {addedToCart.has(product.id.toString()) ? 'Added!' : 'Add to Cart'}
                                             </Button>
                                         </div>
                                     </div>
