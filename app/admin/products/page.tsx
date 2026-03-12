@@ -283,9 +283,6 @@ const AdminProducts = () => {
 
               {profileDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50">
-                  <div className="px-4 py-3 border-b border-gray-700">
-                    <p className="text-gray-600 font-medium truncate">{user?.email || 'No email'}</p>
-                  </div>
                   <Link
                     href="#"
                     className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
