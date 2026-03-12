@@ -275,9 +275,9 @@ const EditProductModal = ({
   };
 
   return (
-    <div className={`fixed inset-0 bg-black/50 backdrop-blur-sm ${
+    <div className={`fixed inset-0 bg-gray-900 ${
       isSizeDropdownOpen || isAvailableDropdownOpen || isColorDropdownOpen ? 'z-[60]' : 'z-50'
-    } flex items-center justify-center p-4`} onClick={isSaving ? undefined : onClose}>
+    } overflow-y-auto`} onClick={isSaving ? undefined : onClose}>
       {/* Loading Overlay */}
       {isSaving && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[70]">
@@ -289,11 +289,11 @@ const EditProductModal = ({
       )}
       
       <div
-        className="bg-gray-800 rounded-xl border border-gray-700 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        className="bg-gray-800 min-h-screen w-full"
         onClick={(e) => e.stopPropagation()}
         ref={modalRef}
       >
-        <div className="px-6 py-4 border-b border-gray-700 flex items-center justify-between">
+        <div className="px-4 py-4 border-b border-gray-700 flex items-center justify-between sticky top-0 bg-gray-800 z-10">
           <h2 className="text-xl font-semibold text-white">Edit Product</h2>
           <button
             onClick={onClose}
@@ -304,7 +304,7 @@ const EditProductModal = ({
           </button>
         </div>
 
-        <div className="p-6 space-y-4">
+        <div className="p-4 sm:p-6 space-y-4 max-w-4xl mx-auto">
           {/* Image Upload Section */}
           <div className={isSizeDropdownOpen || isRatingDropdownOpen || isAvailableDropdownOpen ? 'filter blur-sm pointer-events-none' : ''}>
             <label className="block text-gray-300 text-sm font-medium mb-4">
