@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const getInitialSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       if (session?.user) {
-        setUser({ email: session.user.email })
+        setUser({ email: session.user.email || null })
       }
       setLoading(false)
     }
@@ -52,7 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (session?.user) {
-          setUser({ email: session.user.email })
+          setUser({ email: session.user.email || null })
         } else {
           setUser(null)
         }
