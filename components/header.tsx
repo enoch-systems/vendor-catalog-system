@@ -46,7 +46,6 @@ export const HeroHeader = () => {
         { name: 'Home', href: '/', icon: HousePlus },
         { name: 'Shop Wigs', href: '/shop', icon: ShoppingBag },
         { name: 'Check out', href: '/checkout', icon: CreditCard },
-        { name: 'Shopping Bag', href: '/checkout', icon: ShoppingCart, customIcon: '/shopping-bag.png' },
     ]
 
     // Close dropdown when clicking outside

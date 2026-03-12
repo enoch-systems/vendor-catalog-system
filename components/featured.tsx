@@ -17,6 +17,7 @@ interface FeaturedProps {
 const Featured = ({ initialProducts = [] }: FeaturedProps) => {
     const { addToCart } = useCart()
     const [addedToCart, setAddedToCart] = useState<Set<string>>(new Set())
+    const [isClient, setIsClient] = useState(false)
     // initialize state from props to avoid loading lag
     const [featuredProducts, setFeaturedProducts] = useState<Product[]>(initialProducts)
     const [isLoading, setIsLoading] = useState(initialProducts.length === 0)
@@ -67,6 +68,11 @@ const Featured = ({ initialProducts = [] }: FeaturedProps) => {
         }
         loadProducts()
     }, [initialProducts])
+
+    // Set isClient to true after mount
+    React.useEffect(() => {
+        setIsClient(true)
+    }, [])
 
     // Listen for product updates from admin page
     React.useEffect(() => {
@@ -228,7 +234,7 @@ const Featured = ({ initialProducts = [] }: FeaturedProps) => {
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
                             {featuredProducts.map((product) => (
                                 <Link key={product.id} href={`/shop/${product.id}`} className="block">
-                                <div className="bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-all duration-300 cursor-pointer group">
+                                <div className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group">
                                     {/* Product Image */}
                                     <div className="relative overflow-hidden rounded-t-lg h-48 sm:h-56">
                                         {product.image ? (
@@ -306,16 +312,16 @@ const Featured = ({ initialProducts = [] }: FeaturedProps) => {
                                         {product.inStock ? (
                                             <Button 
                                                 className={`w-full text-xs py-1.5 sm:text-sm sm:py-2 transition-colors ${
-                                                    addedToCart.has(product.id)
+                                                    isClient && addedToCart.has(product.id)
                                                         ? 'bg-green-500 text-white hover:bg-green-600'
-                                                        : 'bg-transparent text-gray-900 hover:bg-gray-100 border border-gray-300'
+                                                        : 'bg-transparent text-black hover:bg-amber-100 border border-gray-200 shadow-sm hover:shadow-md'
                                                 }`}
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     handleAddToCart(product)
                                                 }}
                                             >
-                                                {addedToCart.has(product.id) ? 'Added!' : 'Add to Cart'}
+                                                {isClient && addedToCart.has(product.id) ? 'Added!' : 'Add to Cart'}
                                             </Button>
                                         ) : (
                                             <Button disabled className="w-full text-xs py-1.5 sm:text-sm sm:py-2 bg-gray-300 text-gray-500">
