@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Star, ArrowLeft, ArrowRight, Search, Circle } from 'lucide-react'
+import { Star, Search, Circle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { AnimatedGroup } from '@/components/ui/animated-group'
 import { HeroHeader } from './header'
@@ -415,34 +415,38 @@ const Shop = () => {
 
                         {/* Top Pagination */}
                         <AnimatedGroup variants={transitionVariants}>
-                            <div className="flex justify-center items-center mt-4 mb-7 gap-3">
-                                <button 
-                                    onClick={handlePrevious}
+                            <div className="flex items-center justify-center space-x-2 mt-4 mb-7">
+                                <button
+                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                                     disabled={currentPage === 1}
-                                    className="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-50 rounded-full hover:bg-gray-100 hover:text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
-                                    <ArrowLeft className="w-4 h-4" />
+                                    className="px-3 py-2 text-sm bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
+                                >
+                                    Prev
                                 </button>
-                                <div className="flex gap-3">
-                                    {getPageNumbers().map((pageNumber) => (
+
+                                {Array.from({ length: Math.min(totalPages, 4) }, (_, i) => {
+                                    const pageNumber = i + 1;
+                                    return (
                                         <button
-                                            key={pageNumber}
-                                            onClick={() => handlePageChange(pageNumber)}
-                                            className={`flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors rounded-full
-                                             ${
-                                                pageNumber === currentPage
-                                                    ? 'text-amber-900 bg-amber-50 hover:bg-amber-100'
-                                                    : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'
+                                            key={`top-${pageNumber}`}
+                                            onClick={() => setCurrentPage(pageNumber)}
+                                            className={`px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
+                                                currentPage === pageNumber
+                                                    ? 'bg-amber-900 text-white border border-amber-900 hover:bg-amber-800'
+                                                    : 'bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400'
                                             }`}
                                         >
                                             {pageNumber}
                                         </button>
-                                    ))}
-                                </div>
-                                <button 
-                                    onClick={handleNext}
+                                    );
+                                })}
+
+                                <button
+                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                                     disabled={currentPage === totalPages}
-                                    className="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-100 rounded-full hover:bg-gray-100 hover:text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                                    <ArrowRight className="w-4 h-4" />
+                                    className="px-3 py-2 text-sm bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
+                                >
+                                    Next
                                 </button>
                             </div>
                         </AnimatedGroup>
@@ -576,33 +580,38 @@ const Shop = () => {
 
                         {/* Pagination */}
                         <AnimatedGroup variants={transitionVariants}>
-                            <div className="flex justify-center items-center mt-8 gap-3">
-                                <button 
-                                    onClick={handlePrevious}
+                            <div className="flex items-center justify-center space-x-2 mt-8">
+                                <button
+                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                                     disabled={currentPage === 1}
-                                    className="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-50/70 rounded-full hover:bg-gray-100 hover:text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                                    <ArrowLeft className="w-4 h-4" />
+                                    className="px-3 py-2 text-sm bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
+                                >
+                                    Prev
                                 </button>
-                                <div className="flex gap-3">
-                                    {getPageNumbers().map((pageNumber) => (
+
+                                {Array.from({ length: Math.min(totalPages, 4) }, (_, i) => {
+                                    const pageNumber = i + 1;
+                                    return (
                                         <button
                                             key={pageNumber}
-                                            onClick={() => handlePageChange(pageNumber)}
-                                            className={`flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors rounded-full cursor-pointer ${
-                                                pageNumber === currentPage
-                                                    ? 'text-amber-900 bg-amber-50 hover:bg-amber-100'
-                                                    : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'
+                                            onClick={() => setCurrentPage(pageNumber)}
+                                            className={`px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
+                                                currentPage === pageNumber
+                                                    ? 'bg-amber-900 text-white border border-amber-900 hover:bg-amber-800'
+                                                    : 'bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400'
                                             }`}
                                         >
                                             {pageNumber}
                                         </button>
-                                    ))}
-                                </div>
-                                <button 
-                                    onClick={handleNext}
+                                    );
+                                })}
+
+                                <button
+                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                                     disabled={currentPage === totalPages}
-                                    className="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-50/70 rounded-full hover:bg-gray-100 hover:text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                                    <ArrowRight className="w-4 h-4" />
+                                    className="px-3 py-2 text-sm bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
+                                >
+                                    Next
                                 </button>
                             </div>
                         </AnimatedGroup>
