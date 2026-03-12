@@ -29,7 +29,7 @@ const transitionVariants = {
     },
 }
 
-const faqCategories = [
+const helpCategories = [
     {
         title: 'Order & Shipping',
         icon: '📦',
@@ -140,7 +140,7 @@ const Help = () => {
         alert('Thank you for your message. We will get back to you soon!')
     }
 
-    const filteredFAQs = faqCategories.flatMap(category =>
+    const filteredHelp = helpCategories.flatMap(category =>
         category.questions.filter(q =>
             q.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
             q.a.toLowerCase().includes(searchQuery.toLowerCase())
@@ -183,19 +183,19 @@ const Help = () => {
                         </AnimatedGroup>
 
                         {/* Search Results */}
-                        {searchQuery && filteredFAQs.length > 0 && (
+                        {searchQuery && filteredHelp.length > 0 && (
                             <AnimatedGroup variants={transitionVariants}>
                                 <div className="mb-8">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Search Results</h3>
                                     <div className="space-y-4">
-                                        {filteredFAQs.map((faq, index) => (
+                                        {filteredHelp.map((help, index) => (
                                             <div key={index} className="bg-gray-50 rounded-lg p-4">
                                                 <div className="flex items-start gap-3">
                                                     <HelpCircle className="w-5 h-5 text-amber-900 mt-1 flex-shrink-0" />
                                                     <div className="flex-1">
-                                                        <h4 className="font-medium text-gray-900 mb-2">{faq.q}</h4>
-                                                        <p className="text-gray-600 text-sm">{faq.a}</p>
-                                                        <p className="text-xs text-gray-500 mt-2">Category: {faq.category}</p>
+                                                        <h4 className="font-medium text-gray-900 mb-2">{help.q}</h4>
+                                                        <p className="text-gray-600 text-sm">{help.a}</p>
+                                                        <p className="text-xs text-gray-500 mt-2">Category: {help.category}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -207,12 +207,12 @@ const Help = () => {
 
                         {!searchQuery && (
                             <>
-                                {/* FAQ Categories */}
+                                {/* Help Categories */}
                                 <AnimatedGroup variants={transitionVariants}>
                                     <div className="mb-12">
-                                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+                                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Help Center</h2>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                            {faqCategories.map((category, categoryIndex) => (
+                                            {helpCategories.map((category, categoryIndex) => (
                                                 <div key={categoryIndex} className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                                                     <button
                                                         onClick={() => setExpandedCategory(expandedCategory === category.title ? null : category.title)}

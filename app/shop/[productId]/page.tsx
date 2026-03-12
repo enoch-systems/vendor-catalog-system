@@ -339,13 +339,13 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                 <div>
                                     {product.inStock ? (
                                         <div className="flex items-center gap-1 mb-2">
-                                            <Circle stroke="none" className="fill-green-500 size-3" />
+                                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                                             <span className="text-sm text-green-600 font-medium">In Stock</span>
                                         </div>
                                     ) : (
                                         <div className="flex items-center gap-1 mb-2">
-                                            <Circle stroke="none" className="fill-gray-500 size-3" />
-                                            <span className="text-sm text-gray-600 font-medium">Sold Out</span>
+                                            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                                            <span className="text-sm text-red-600 font-medium">Out of Stock</span>
                                         </div>
                                     )}
                                     <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
@@ -469,7 +469,7 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                             : 'bg-gray-400 cursor-not-allowed'
                                     }`}
                                 >
-                                    {addedToCart.has(product.id) ? '✓ Added to Cart' : 'Add to Cart'}
+                                    {addedToCart.has(product.id) ? '✓ Added to Cart' : product.inStock ? 'Add to Cart' : 'SOLD OUT'}
                                 </button>
 
                                 {relatedProducts.length > 0 && (
@@ -490,9 +490,18 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                                                     src={rel.image}
                                                                     alt={rel.name}
                                                                     fill
-                                                                    className="object-cover group-hover:scale-110 transition-transform duration-300"
+                                                                    className={`object-cover group-hover:scale-110 transition-transform duration-300 ${
+                                                                        !rel.inStock ? 'brightness-50' : ''
+                                                                    }`}
                                                                     quality={75}
                                                                 />
+                                                            )}
+                                                            {!rel.inStock && (
+                                                                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                                                                    <div className="bg-white px-3 py-1 rounded-full">
+                                                                        <span className="text-red-500 font-semibold text-sm">SOLD OUT</span>
+                                                                    </div>
+                                                                </div>
                                                             )}
                                                         </div>
                                                         <div className="p-4 flex-1 flex flex-col justify-between">
@@ -512,8 +521,10 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                                                 {rel.originalPrice && (
                                                                     <p className="text-sm text-gray-500 line-through">{rel.originalPrice}</p>
                                                                 )}
-                                                                {rel.inStock && (
+                                                                {rel.inStock ? (
                                                                     <p className="text-xs text-green-600 font-medium mt-1">In Stock</p>
+                                                                ) : (
+                                                                    <p className="text-xs text-red-600 font-medium mt-1">Out of Stock</p>
                                                                 )}
                                                             </div>
                                                         </div>

@@ -4,7 +4,6 @@ import "./globals.css";
 import { CartProvider } from "@/components/cart-context";
 import { UIProvider } from "@/contexts/ui-context";
 import { AuthProvider } from "@/contexts/auth-context";
-import ConditionalFloatingWhatsApp from "@/components/conditional-floating-whatsapp";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +38,6 @@ export default function RootLayout({
           <UIProvider>
             <CartProvider>
               {children}
-              <ConditionalFloatingWhatsApp />
             </CartProvider>
           </UIProvider>
         </AuthProvider>

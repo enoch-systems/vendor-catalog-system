@@ -535,8 +535,10 @@ const Shop = () => {
                                             
                                             {/* Sold Out Badge */}
                                             {!product.inStock && (
-                                                <div className="absolute top-1 right-2">
-                                                    <img src="/soldout.png" alt="Sold Out" className="h-20 w-26 object-contain" />
+                                                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                                                    <div className="bg-white px-3 py-1 rounded-full">
+                                                        <span className="text-red-500 font-semibold text-sm">SOLD OUT</span>
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
@@ -546,13 +548,13 @@ const Shop = () => {
                                             {/* In Stock Indicator */}
                                             {product.inStock ? (
                                                 <div className="flex items-center justify-end gap-1 mb-1 sm:mb-2">
-                                                    <Circle stroke="none" className="fill-green-500 size-2.5 sm:size-3" />
+                                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                                                     <span className="text-xs text-green-600">In Stock</span>
                                                 </div>
                                             ) : (
                                                 <div className="flex items-center justify-end gap-1 mb-1 sm:mb-2">
-                                                    <Circle stroke="none" className="fill-gray-500 size-2.5 sm:size-3" />
-                                                    <span className="text-xs text-gray-600">Sold Out</span>
+                                                    <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                                                    <span className="text-xs text-red-600">Out of Stock</span>
                                                 </div>
                                             )}
                                             <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1 sm:mb-2 line-clamp-2">

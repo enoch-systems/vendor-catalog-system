@@ -14,10 +14,6 @@ const links = [
                 href: '/shop',
             },
             {
-                title: 'Accessories',
-                href: '#',
-            },
-            {
                 title: 'Customer Support',
                 href: '#',
             },

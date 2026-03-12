@@ -35,16 +35,14 @@ export const HeroHeader = () => {
     const mobileMenuItems: MenuItem[] = [
         { name: 'Home', href: '/', icon: HousePlus },
         { name: 'Shop Wigs', href: '/shop', icon: ShoppingBag },
-        { name: 'Accessories', href: '/accessories', icon: ScissorsLineDashed },
         { name: 'Check out', href: '/checkout', icon: CreditCard },
-        { name: 'FAQ', href: '/help', icon: HelpCircle },
-        { name: 'My Account', href: '/admin/products', icon: User, customIcon: '/admin.png' },
+        { name: 'Help', href: '/help', icon: HelpCircle },
+        { name: 'My Account', href: '/admin/products', icon: User, customIcon: '/avatar.jpeg' },
     ]
 
     const desktopMenuItems: MenuItem[] = [
         { name: 'Home', href: '/', icon: HousePlus },
         { name: 'Shop Wigs', href: '/shop', icon: ShoppingBag },
-        { name: 'Accessories', href: '/accessories', icon: ScissorsLineDashed },
         { name: 'Check out', href: '/checkout', icon: CreditCard },
         { name: 'Shopping Bag', href: '/checkout', icon: ShoppingCart, customIcon: '/shopping-bag.png' },
     ]
@@ -141,7 +139,7 @@ export const HeroHeader = () => {
                                         <Link
                                             href={item.href}
                                             className={`text-black hover:text-black flex items-center gap-2 duration-150`}>
-                                            {(['Home', 'Shop Wigs', 'Accessories'].includes(item.name)) ? null : (
+                                            {(['Home', 'Shop Wigs'].includes(item.name)) ? null : (
                                                 item.customIcon ? (
                                                     <div className="relative">
                                                         <Image src={item.customIcon} alt={item.name} width={16} height={16} className="size-4 object-contain" />

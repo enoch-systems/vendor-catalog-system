@@ -42,8 +42,7 @@ export const updateSocialLinks = async () => {
       facebook: 'https://facebook.com/yourstorepage',
       instagram: 'https://instagram.com/yourprofile',
       twitter: 'https://twitter.com/yourprofile',
-      tiktok: 'https://tiktok.com/@yourprofile',
-      whatsapp: '+234 (0) 123 456 7890'
+      tiktok: 'https://tiktok.com/@yourprofile'
     }
   });
 };
@@ -89,8 +88,8 @@ export const updateBusinessHours = async () => {
 // Example 8: Update SEO meta tags
 export const updateSEOSettings = async () => {
   await updateSettings({
-    meta_description: 'Premium hair extensions and accessories. Shop high-quality, affordable hair products online.',
-    meta_keywords: 'hair extensions, wigs, hair accessories, quality hair'
+    meta_description: 'Premium hair extensions. Shop high-quality, affordable hair products online.',
+    meta_keywords: 'hair extensions, wigs, quality hair'
   });
 };
 
@@ -148,7 +147,7 @@ export const updateAllSettings = async () => {
     privacy_policy: 'Your privacy policy text here...',
     return_policy: 'Your return policy text here...',
     shipping_policy: 'Your shipping policy text here...',
-    meta_description: 'Premium hair extensions and accessories. Shop high-quality, affordable hair products online.',
-    meta_keywords: 'hair extensions, wigs, hair accessories, quality hair'
+    meta_description: 'Premium hair extensions. Shop high-quality, affordable hair products online.',
+    meta_keywords: 'hair extensions, wigs, quality hair'
   });
 };
