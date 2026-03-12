@@ -334,7 +334,7 @@ const Shop = () => {
                         </AnimatedGroup>
 
                         {/* Search Bar */}
-                        <AnimatedGroup variants={transitionVariants} className="relative z-[10000]">
+                        <AnimatedGroup variants={transitionVariants} className="relative z-1">
                             <div ref={searchWrapperRef} className="relative text-center mb-6">
                                 {!profileDropdownOpen && !mobileMenuOpen && (
                                     <div className="hover:bg-background bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-2 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300">
@@ -344,6 +344,7 @@ const Shop = () => {
                                             className="text-foreground text-sm bg-transparent outline-none w-64 placeholder:text-muted-foreground"
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
+                                            style={{ fontSize: '16px' }}
                                         />
                                         <span className="block h-4 w-0.5 border-l bg-white"></span>
                                         <div className="bg-background group-hover:bg-muted size-6 overflow-hidden rounded-full duration-500 flex items-center justify-center">
