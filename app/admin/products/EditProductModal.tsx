@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, X, Upload, Bot, Plus, Edit, CheckCircle } from 'lucide-react';
+import { ChevronDown, X, Upload, Bot, Plus, Edit, CheckCircle, ArrowLeft } from 'lucide-react';
 import { Product } from '@/lib/products';
 import { descriptionTemplates } from './descriptionTemplates';
 import { uploadToCloudinary } from '@/lib/cloudinary';
@@ -293,15 +293,17 @@ const EditProductModal = ({
         onClick={(e) => e.stopPropagation()}
         ref={modalRef}
       >
-        <div className="px-4 py-4 border-b border-gray-700 flex items-center justify-between sticky top-0 bg-gray-800 z-10">
-          <h2 className="text-xl font-semibold text-white">Edit Product</h2>
-          <button
-            onClick={onClose}
-            disabled={isSaving}
-            className="p-2 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            <X size={20} className="text-gray-400" />
-          </button>
+        <div className="px-4 py-4 pt-10 border-b border-gray-700 flex items-center sticky top-0 bg-gray-800 z-10">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onClose}
+              disabled={isSaving}
+              className="p-2 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <ArrowLeft size={24} className="text-white" />
+            </button>
+            <h2 className="text-xl font-semibold text-white">Edit Product</h2>
+          </div>
         </div>
 
         <div className="p-4 sm:p-6 space-y-4 max-w-4xl mx-auto">
