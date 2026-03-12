@@ -60,7 +60,6 @@ const Shop = () => {
     const [selectedCategory, setSelectedCategory] = useState('All')
     const [currentPage, setCurrentPage] = useState(1)
     const [addedToCart, setAddedToCart] = useState<Set<string>>(new Set())
-    const [isClient, setIsClient] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
 
     // reference and positioning for the dropdown so we can render it
@@ -84,11 +83,6 @@ const Shop = () => {
         }
 
         loadProducts()
-    }, [])
-
-    // Set isClient to true after mount
-    useEffect(() => {
-        setIsClient(true)
     }, [])
 
     // Listen for product updates from admin page
@@ -172,7 +166,7 @@ const Shop = () => {
         return () => window.removeEventListener('resize', handler)
     }, [])
 
-    const productsPerPage = 12
+    const productsPerPage = 10
     const sortOptions = ['Default', 'Price: Low to High', 'Price: High to Low']
     const categories = ['All', 'Lace', 'Human Hair', 'Curly', 'Straight', 'Colored']
 
@@ -487,10 +481,10 @@ const Shop = () => {
                             </AnimatedGroup>
                         ) : (
                         <AnimatedGroup variants={transitionVariants}>
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
                                 {displayedProducts.map((product) => (
                                     <Link key={product.id} href={`/shop/${product.id}`} className="block">
-                                        <div className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                        <div className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group">
                                         {/* Product Image */}
                                         <div className="relative overflow-hidden rounded-t-lg h-48 sm:h-56">
                                             {product.image ? (
@@ -499,7 +493,7 @@ const Shop = () => {
                                                     alt={product.name}
                                                     width={300}
                                                     height={300}
-                                                    className={`w-full h-48 sm:h-56 object-cover transition-transform duration-300 ${
+                                                    className={`w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-300 ${
                                                         !product.inStock ? 'brightness-50' : ''
                                                     }`}
                                                     loading="lazy"
@@ -565,7 +559,7 @@ const Shop = () => {
                                             {product.inStock ? (
                                                 <Button 
                                                     className={`w-full text-xs py-1.5 sm:text-sm sm:py-2 transition-colors ${
-                                                        isClient && addedToCart.has(product.id)
+                                                        addedToCart.has(product.id)
                                                             ? 'bg-green-500 text-white hover:bg-green-600'
                                                             : 'bg-transparent text-black hover:bg-amber-100 border border-gray-200 shadow-sm hover:shadow-md'
                                                     }`}
@@ -574,7 +568,7 @@ const Shop = () => {
                                                         handleAddToCart(product)
                                                     }}
                                                 >
-                                                    {isClient && addedToCart.has(product.id) ? 'Added!' : 'Add to Cart'}
+                                                    {addedToCart.has(product.id) ? 'Added!' : 'Add to Cart'}
                                                 </Button>
                                             ) : (
                                                 <Button disabled className="w-full text-xs py-1.5 sm:text-sm sm:py-2 bg-gray-300 text-gray-500">

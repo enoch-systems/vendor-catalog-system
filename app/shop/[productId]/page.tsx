@@ -249,18 +249,19 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
         <>
             <HeroHeader />
             <main className="overflow-hidden">
-                <section className="py-8 mt-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+                <section className="py-6 sm:py-8 lg:py-12 mt-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
                     <div className="max-w-7xl mx-auto">
-                        <div className="mb-6">
+                        <div className="mb-6 sm:mb-8">
                             <Link href="/shop">
-                                <Button className="flex items-center gap-2 bg-transparent border border-gray-400 text-gray-700 hover:bg-gray-50 mb-12">
-                                    <ArrowLeft className="w-5 h-5" />
-                                    Back to Shopping
+                                <Button className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 shadow-sm transition-all duration-200">
+                                    <ArrowLeft className="w-4 h-4" />
+                                    <span className="hidden sm:inline">Back to Shopping</span>
+                                    <span className="sm:hidden">Back</span>
                                 </Button>
                             </Link>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 xl:gap-20">
                             {(() => {
                                 const allImages = [product.image];
                                 if (product.images) {
@@ -275,47 +276,57 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
 
                                 return (
                                     <>
-                            <div className="space-y-4">
-                                <div className="relative w-full aspect-square bg-gray-100 flex items-center justify-center">
+                            <div className="space-y-6">
+                                <div className="relative w-full aspect-square bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
                                     {currentImage ? (
                                         <Image
                                             src={currentImage}
                                             alt={`${product.name} - Image ${selectedImage + 1}`}
                                             fill
-                                            className={`rounded-lg shadow-lg object-cover ${
-                                                !product.inStock ? 'brightness-50' : ''
+                                            className={`object-cover transition-all duration-300 ${
+                                                !product.inStock ? 'brightness-50' : 'hover:scale-105'
                                             }`}
                                             priority={true}
-                                            quality={90}
+                                            quality={95}
                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
                                         />
                                     ) : (
-                                        <div className="text-center text-gray-400">
-                                            <p>No image available</p>
+                                        <div className="flex items-center justify-center h-full">
+                                            <div className="text-center">
+                                                <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                    <svg className="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                                <p className="text-gray-400">No image available</p>
+                                            </div>
                                         </div>
                                     )}
                                     {product.badge && (
-                                        <span className="absolute top-4 left-4 bg-red-500 text-white text-xs px-3 py-1 rounded-full font-semibold">
+                                        <span className="absolute top-4 left-4 bg-red-500 text-white text-xs sm:text-sm px-3 py-1.5 rounded-full font-semibold shadow-lg z-10">
                                             {product.badge}
                                         </span>
                                     )}
                                     {!product.inStock && (
-                                        <div className="absolute top-4 right-4">
-                                            <Image src="/soldout.png" alt="Sold Out" width={64} height={64} className="h-16 w-16 object-contain" />
+                                        <div className="absolute top-4 right-4 z-10">
+                                            <div className="bg-white px-3 py-1.5 rounded-full shadow-lg">
+                                                <span className="text-red-500 font-bold text-sm">SOLD OUT</span>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
                                 
-                                <div className="flex gap-3 overflow-x-auto pb-2">
+                                <div className="flex gap-3 overflow-x-auto pb-2 px-1">
                                     {validImages.map((image: string, thumbIndex: number) => {
                                         if (brokenImageIndices.has(thumbIndex)) return null;
                                         return (
                                         <button
                                             key={thumbIndex}
                                             onClick={() => setSelectedImage(thumbIndex)}
-                                            className={`relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all ${                                                    selectedImage === thumbIndex
-                                                    ? 'border-amber-500 ring-2 ring-amber-500'
-                                                    : 'border-gray-200 hover:border-gray-400'
+                                            className={`relative flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                                                selectedImage === thumbIndex
+                                                    ? 'border-amber-500 ring-2 ring-amber-500 ring-offset-2 shadow-lg'
+                                                    : 'border-gray-200 hover:border-gray-400 hover:shadow-md'
                                             }`}
                                         >
                                             <Image
@@ -335,35 +346,39 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                 </div>
                             </div>
 
-                            <div className="space-y-6">
-                                <div>
+                            <div className="space-y-6 lg:space-y-8">
+                                <div className="space-y-4">
                                     {product.inStock ? (
-                                        <div className="flex items-center gap-1 mb-2">
-                                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                                            <span className="text-sm text-green-600 font-medium">In Stock</span>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse shadow-sm"></div>
+                                            <span className="text-sm sm:text-base text-green-600 font-semibold">In Stock</span>
                                         </div>
                                     ) : (
-                                        <div className="flex items-center gap-1 mb-2">
-                                            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                                            <span className="text-sm text-red-600 font-medium">Out of Stock</span>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-sm"></div>
+                                            <span className="text-sm sm:text-base text-red-600 font-semibold">Out of Stock</span>
                                         </div>
                                     )}
-                                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <span className="text-3xl font-semibold text-gray-900">{product.price}</span>
-                                        <span className="text-xl text-gray-500 line-through">{product.originalPrice}</span>
+                                    <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 leading-tight">{product.name}</h1>
+                                    <div className="flex items-center gap-4 sm:gap-6">
+                                        <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">{product.price}</span>
+                                        {product.originalPrice && (
+                                            <span className="text-lg sm:text-xl lg:text-2xl text-gray-400 line-through">{product.originalPrice}</span>
+                                        )}
                                     </div>
-                                    <StarRating rating={product.rating || 0} />
+                                    <div className="py-2">
+                                        <StarRating rating={product.rating || 0} />
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <h3 className="text-lg font-semibold mb-2">Description</h3>
-                                    <p className="text-gray-600 leading-relaxed">{product.description}</p>
+                                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                                    <h3 className="text-lg font-bold text-gray-900 mb-3">Product Details</h3>
+                                    <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{product.description}</p>
                                 </div>
 
-                                <div>
-                                    <h3 className="text-lg font-semibold mb-3">Color</h3>
-                                    <div className="space-y-3">
+                                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                                    <h3 className="text-lg font-bold text-gray-900 mb-4">Select Color</h3>
+                                    <div className="space-y-4">
                                         <div className="flex flex-wrap gap-3">
                                             {(product.colors || []).map((color: string) => (
                                                 <button
@@ -373,10 +388,10 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                                         setCustomColor('')
                                                         setIsCustomColorDropdownOpen(false)
                                                     }}
-                                                    className={`w-10 h-10 rounded-full border-2 transition-all ${
+                                                    className={`w-12 h-12 rounded-full border-2 transition-all duration-200 shadow-sm ${
                                                         selectedColor === color && customColor === ''
-                                                            ? 'border-amber-600 ring-2 ring-amber-600'
-                                                            : 'border-gray-300 hover:border-gray-400'
+                                                            ? 'border-amber-600 ring-2 ring-amber-600 ring-offset-2 shadow-md'
+                                                            : 'border-gray-300 hover:border-gray-400 hover:shadow-md'
                                                     }`}
                                                     title={color}
                                                     style={{
@@ -389,13 +404,13 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                             <button
                                                 type="button"
                                                 onClick={() => setIsCustomColorDropdownOpen(!isCustomColorDropdownOpen)}
-                                                className="text-sm text-amber-600 hover:text-amber-700 font-medium"
+                                                className="text-sm text-amber-600 hover:text-amber-700 font-medium transition-colors"
                                             >
-                                                Color not listed?
+                                                Color not listed? Request custom color
                                             </button>
                                             {isCustomColorDropdownOpen && (
-                                                <div className="mt-2 p-3 bg-gray-50 border border-gray-300 rounded-lg">
-                                                    <div className="flex gap-2">
+                                                <div className="mt-3 p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm">
+                                                    <div className="flex gap-3">
                                                         <input
                                                             type="text"
                                                             value={customColor}
@@ -406,7 +421,7 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                                                 }
                                                             }}
                                                             placeholder="Type your color..."
-                                                            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-sm"
+                                                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-transparent text-sm"
                                                             autoFocus
                                                         />
                                                         <button
@@ -416,7 +431,7 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                                                 setSelectedColor('Black')
                                                                 setIsCustomColorDropdownOpen(false)
                                                             }}
-                                                            className="px-3 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400 rounded-lg text-sm font-medium transition-colors"
+                                                            className="px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400 rounded-lg text-sm font-medium transition-colors"
                                                         >
                                                             Reset
                                                         </button>
@@ -430,30 +445,30 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                     </div>
                                 </div>
 
-                                <div className="mt-12">
-                                    <label className="text-sm font-medium text-gray-700 block mb-2">Select Your Length:</label>
+                                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                                    <label className="text-lg font-bold text-gray-900 block mb-4">Select Length</label>
                                     <div className="flex flex-wrap gap-3">
                                         {product.sizes && product.sizes.length > 0 ? (
                                             product.sizes.map((length: string) => (
                                                 <button
                                                     key={length}
                                                     onClick={() => setSelectedSize(length)}
-                                                    className={`px-4 py-2 rounded-lg border-4 transition-all font-medium ${
+                                                    className={`px-5 py-3 rounded-xl border-2 transition-all font-semibold text-sm sm:text-base ${
                                                         selectedSize === length
-                                                            ? 'text-amber-700 border-amber-600 bg-transparent'
-                                                            : 'bg-white text-black border-gray-300 hover:border-amber-600'
+                                                            ? 'text-amber-700 border-amber-600 bg-amber-50 shadow-md'
+                                                            : 'bg-white text-gray-700 border-gray-300 hover:border-amber-600 hover:bg-amber-50'
                                                     }`}
                                                 >
                                                     {length}
                                                 </button>
                                             ))
                                         ) : (
-                                            <span className="text-gray-500">No lengths available for selection</span>
+                                            <span className="text-gray-500 italic">No lengths available</span>
                                         )}
                                     </div>
                                     {selectedSize && (
-                                        <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                                            <p className="text-sm text-amber-800">Selected Length: <strong>{selectedSize}</strong></p>
+                                        <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                                            <p className="text-sm text-amber-800 font-medium">✓ Selected Length: <strong>{selectedSize}</strong></p>
                                         </div>
                                     )}
                                 </div>
@@ -461,11 +476,11 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                 <button
                                     onClick={handleAddToCart}
                                     disabled={!product.inStock}
-                                    className={`w-full py-3 px-6 rounded-lg font-semibold text-white transition-all ${
+                                    className={`w-full py-4 px-8 rounded-xl font-bold text-white transition-all duration-200 text-lg shadow-lg hover:shadow-xl ${
                                         addedToCart.has(product.id)
                                             ? 'bg-green-600 hover:bg-green-700'
                                             : product.inStock
-                                            ? 'bg-amber-900 hover:bg-amber-800'
+                                            ? 'bg-amber-900 hover:bg-amber-800 hover:scale-[1.02]'
                                             : 'bg-gray-400 cursor-not-allowed'
                                     }`}
                                 >
@@ -473,15 +488,15 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                 </button>
 
                                 {relatedProducts.length > 0 && (
-                                    <div className="mt-12 border-t pt-12">
-                                        <h3 className="text-2xl font-bold text-gray-900 mb-8">You May Also Like</h3>
-                                        <div className="grid grid-cols-2 gap-6">
+                                    <div className="mt-16 border-t border-gray-200 pt-12">
+                                        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">You May Also Like</h3>
+                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                                             {relatedProducts.map(rel => (
-                                                <Link key={rel.id} href={`/shop/${rel.id}`}>
-                                                    <div className="group bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 h-full flex flex-col">
-                                                        <div className="relative w-full aspect-square rounded-t-xl overflow-hidden bg-gray-100">
+                                                <Link key={rel.id} href={`/shop/${rel.id}`} className="block">
+                                                    <div className="group bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+                                                        <div className="relative w-full aspect-square rounded-t-2xl overflow-hidden bg-gray-50">
                                                             {rel.badge && (
-                                                                <span className="absolute top-3 right-3 bg-red-500 text-white text-xs px-3 py-1 rounded-full font-semibold z-10">
+                                                                <span className="absolute top-3 right-3 bg-red-500 text-white text-xs px-3 py-1.5 rounded-full font-semibold z-10 shadow-lg">
                                                                     {rel.badge}
                                                                 </span>
                                                             )}
@@ -490,41 +505,41 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                                                     src={rel.image}
                                                                     alt={rel.name}
                                                                     fill
-                                                                    className={`object-cover group-hover:scale-110 transition-transform duration-300 ${
+                                                                    className={`object-cover group-hover:scale-110 transition-transform duration-500 ${
                                                                         !rel.inStock ? 'brightness-50' : ''
                                                                     }`}
-                                                                    quality={75}
+                                                                    quality={80}
                                                                 />
                                                             )}
                                                             {!rel.inStock && (
                                                                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                                                    <div className="bg-white px-3 py-1 rounded-full">
-                                                                        <span className="text-red-500 font-semibold text-sm">SOLD OUT</span>
+                                                                    <div className="bg-white px-3 py-1.5 rounded-full">
+                                                                        <span className="text-red-500 font-bold text-sm">SOLD OUT</span>
                                                                     </div>
                                                                 </div>
                                                             )}
                                                         </div>
                                                         <div className="p-4 flex-1 flex flex-col justify-between">
                                                             <div>
-                                                                <p className="text-sm font-semibold text-gray-900 group-hover:text-amber-700 transition-colors line-clamp-2">
+                                                                <p className="text-sm font-bold text-gray-900 group-hover:text-amber-700 transition-colors line-clamp-2 mb-2">
                                                                     {rel.name.charAt(0).toUpperCase() + rel.name.slice(1).toLowerCase()}
                                                                 </p>
                                                                 {rel.rating && (
-                                                                    <div className="flex items-center gap-1 mt-2">
+                                                                    <div className="flex items-center gap-1">
                                                                         <Star className="size-3 fill-yellow-400 text-yellow-400" />
                                                                         <span className="text-xs text-gray-600">({rel.rating})</span>
                                                                     </div>
                                                                 )}
                                                             </div>
-                                                            <div className="mt-3">
+                                                            <div className="mt-3 space-y-1">
                                                                 <p className="text-base font-bold text-gray-900">{rel.price}</p>
                                                                 {rel.originalPrice && (
-                                                                    <p className="text-sm text-gray-500 line-through">{rel.originalPrice}</p>
+                                                                    <p className="text-sm text-gray-400 line-through">{rel.originalPrice}</p>
                                                                 )}
                                                                 {rel.inStock ? (
-                                                                    <p className="text-xs text-green-600 font-medium mt-1">In Stock</p>
+                                                                    <p className="text-xs text-green-600 font-semibold">In Stock</p>
                                                                 ) : (
-                                                                    <p className="text-xs text-red-600 font-medium mt-1">Out of Stock</p>
+                                                                    <p className="text-xs text-red-600 font-semibold">Out of Stock</p>
                                                                 )}
                                                             </div>
                                                         </div>
