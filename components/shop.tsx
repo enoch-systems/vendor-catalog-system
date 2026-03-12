@@ -176,10 +176,12 @@ const Shop = () => {
     }
     
     const sortedProducts = sortProductsByBadge(products)
-    const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct)
-    const filteredProducts = sortedProducts.filter(product => product.name.toLowerCase().startsWith(searchQuery.toLowerCase()))
-    const displayedProducts = searchQuery ? filteredProducts : currentProducts
-    const totalPages = Math.ceil(sortedProducts.length / productsPerPage)
+    const filteredProducts = sortedProducts.filter(product => 
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct)
+    const displayedProducts = currentProducts
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage)
 
     const handlePrevious = () => {
         if (currentPage > 1) {
@@ -355,37 +357,6 @@ const Shop = () => {
                             </div>
                         </AnimatedGroup>
                         
-                        {/* portal-style fixed results so they sit above everything */}
-                        {searchQuery && filteredProducts.length > 0 && resultsStyle && (
-                            <>
-                                {/* backdrop blur layer */}
-                                <div
-                                    className="fixed inset-0 bg-white/25 backdrop-blur-sm z-[9998]"
-                                    onClick={() => setSearchQuery('')}
-                                />
-
-                                <div
-                                    className="fixed bg-white border border-gray-300 rounded-lg shadow-lg max-h-64 overflow-y-auto z-[9999]"
-                                    style={{
-                                        top: resultsStyle.top + 8,
-                                        left: resultsStyle.left,
-                                        transform: 'translateX(-50%)',
-                                        width: resultsStyle.width
-                                    }}
-                                >
-                                    {filteredProducts.slice(0, 10).map(product => (
-                                        <div key={product.id} className="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
-                                            <img src={product.image} alt={product.name} className="w-10 h-10 object-cover rounded mr-3" />
-                                            <div>
-                                                <p className="text-sm font-semibold">{product.name.charAt(0).toUpperCase() + product.name.slice(1).toLowerCase()}</p>
-                                                <p className="text-xs text-gray-500">{product.price}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </>
-                        )}
-
                         {/* Filters */}
                         <AnimatedGroup variants={transitionVariants}>
                             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 gap-4">
@@ -396,7 +367,7 @@ const Shop = () => {
                                         <select
                                             value={selectedCategory}
                                             onChange={(e) => setSelectedCategory(e.target.value)}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-900 focus:border-transparent text-gray-500"
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-900 focus:border-transparent text-gray-500 cursor-pointer"
                                         >
                                             {categories.map((category) => (
                                                 <option key={category} value={category}>
@@ -413,7 +384,7 @@ const Shop = () => {
                                         <button
                                             key={category}
                                             onClick={() => setSelectedCategory(category)}
-                                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors${
+                                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer${
                                                 selectedCategory === category
                                                     ? 'bg-amber-700 text-yellow-600'
                                                     : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
@@ -430,7 +401,7 @@ const Shop = () => {
                                     <select
                                         value={selectedSort}
                                         onChange={(e) => setSelectedSort(e.target.value)}
-                                        className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-900 focus:border-transparent text-gray-500"
+                                        className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-900 focus:border-transparent text-gray-500 cursor-pointer"
                                     >
                                         {sortOptions.map((option) => (
                                             <option key={option} value={option}>
@@ -443,13 +414,12 @@ const Shop = () => {
                         </AnimatedGroup>
 
                         {/* Top Pagination */}
-                        {!searchQuery && (
                         <AnimatedGroup variants={transitionVariants}>
                             <div className="flex justify-center items-center mt-4 mb-7 gap-3">
                                 <button 
                                     onClick={handlePrevious}
                                     disabled={currentPage === 1}
-                                    className="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-50 rounded-full hover:bg-gray-100 hover:text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                    className="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-50 rounded-full hover:bg-gray-100 hover:text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
                                     <ArrowLeft className="w-4 h-4" />
                                 </button>
                                 <div className="flex gap-3">
@@ -476,7 +446,6 @@ const Shop = () => {
                                 </button>
                             </div>
                         </AnimatedGroup>
-                        )}
 
                         {/* Products Grid - Same as featured: 2 cols on mobile, 3 on tablet, 4 on desktop */}
                         {displayedProducts.length === 0 ? (
@@ -606,7 +575,6 @@ const Shop = () => {
                         )}
 
                         {/* Pagination */}
-                        {!searchQuery && (
                         <AnimatedGroup variants={transitionVariants}>
                             <div className="flex justify-center items-center mt-8 gap-3">
                                 <button 
@@ -620,7 +588,7 @@ const Shop = () => {
                                         <button
                                             key={pageNumber}
                                             onClick={() => handlePageChange(pageNumber)}
-                                            className={`flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors rounded-full ${
+                                            className={`flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors rounded-full cursor-pointer ${
                                                 pageNumber === currentPage
                                                     ? 'text-amber-900 bg-amber-50 hover:bg-amber-100'
                                                     : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'
@@ -638,7 +606,6 @@ const Shop = () => {
                                 </button>
                             </div>
                         </AnimatedGroup>
-                        )}
                     </div>
                 </section>
 

@@ -210,35 +210,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose }) => {
   }, [newProduct.inStock]);
 
   // image handlers now upload straight to Cloudinary using an unsigned preset
-  const handleMainImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    // Show preview immediately using blob URL
-    const blobUrl = URL.createObjectURL(file);
-    setMainImage(blobUrl);
-    setDisplayImage(blobUrl);
-
-    try {
-      const { url } = await uploadToCloudinary(file);
-      setMainImage(url);
-      setDisplayImage(url);
-      setNewProduct(prev => ({ ...prev, image: url }));
-
-      const newThumbs = [...thumbnailImages];
-      newThumbs[0] = url;
-      setThumbnailImages(newThumbs);
-
-      const newImages = [...(newProduct.images || [])];
-      newImages[0] = url;
-      setNewProduct(prev => ({ ...prev, images: newImages }));
-    } catch (err) {
-      console.error('Main image upload failed', err);
-      // Keep the preview even if upload fails
-      alert('Could not upload main image');
-    }
-  };
-
   const handleThumbnailUpload = async (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -252,16 +223,31 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose }) => {
     try {
       const { url } = await uploadToCloudinary(file);
       const finalThumbnails = [...thumbnailImages];
-      finalThumbnails[index] = url;
-      setThumbnailImages(finalThumbnails);
 
       const newImages = [...(newProduct.images || [])];
       newImages[index] = url;
-      setNewProduct(prev => ({ ...prev, images: newImages }));
-    } catch (err) {
-      console.error('Thumbnail upload failed', err);
-      // Keep the preview even if upload fails
-      alert('Could not upload thumbnail');
+      setNewProduct(prev => ({
+        ...prev,
+        images: newImages
+      }));
+    } catch (error) {
+      console.error('Error uploading thumbnail:', error);
+    }
+  };
+
+  const handleMainImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const { url } = await uploadToCloudinary(file);
+      setNewProduct(prev => ({
+        ...prev,
+        image: url
+      }));
+      setMainImage(url);
+    } catch (error) {
+      console.error('Error uploading main image:', error);
     }
   };
 

@@ -5,14 +5,32 @@ import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useAuth } from '@/contexts/auth-context'
 
 export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false)
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
     const router = useRouter()
+    const { signIn } = useAuth()
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        router.push('/admin/products')
+        setError('')
+        setLoading(true)
+
+        const formData = new FormData(e.currentTarget)
+        const email = formData.get('email') as string
+        const password = formData.get('pwd') as string
+
+        try {
+            await signIn(email, password)
+            router.push('/admin/products')
+        } catch (err: any) {
+            setError(err.message || 'Invalid email or password')
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -34,8 +52,14 @@ export default function LoginPage() {
                         <h1 className="mb-1 mt-4 text-xl font-semibold">Login as Admin</h1>
                     </div>
 
+                    {/* Error Message */}
+                    {error && (
+                        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                            {error}
+                        </div>
+                    )}
 
-                        <div className="space-y-6">
+                    <div className="space-y-6">
                         <div className="space-y-2">
                             <Label
                                 htmlFor="email"
@@ -74,8 +98,15 @@ export default function LoginPage() {
                             </button>
                         </div>
 
-                        <Button className="w-full">
-                            Login
+                        <Button className="w-full" disabled={loading}>
+                            {loading ? (
+                                <>
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                    Signing in...
+                                </>
+                            ) : (
+                                'Login'
+                            )}
                         </Button>
                     </div>
                 </div>

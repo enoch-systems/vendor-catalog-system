@@ -249,7 +249,7 @@ export default function HeroSection({ initialFeatured = [] }: HeroSectionProps) 
                         {/* backdrop blur layer */}
                         {searchQuery && filteredProducts.length > 0 && (
                             <div
-                                className="fixed inset-0 bg-white/25 backdrop-blur-sm z-[9998]"
+                                className="fixed inset-0 bg-white/25 backdrop-blur-sm z-[9998] cursor-pointer"
                                 onClick={() => setSearchQuery('')}
                             />
                         )}

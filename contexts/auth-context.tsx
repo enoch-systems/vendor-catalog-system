@@ -11,6 +11,7 @@ type SimpleUser = {
 interface AuthContextType {
   user: SimpleUser | null
   loading: boolean
+  signingOut: boolean
   signIn: (email: string, password: string) => Promise<void>
   signUp: (email: string, password: string) => Promise<void>
   signInWithGoogle: () => Promise<void>
@@ -35,6 +36,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<SimpleUser | null>(null)
   const [loading, setLoading] = useState(true)
+  const [signingOut, setSigningOut] = useState(false)
 
   useEffect(() => {
     // Get initial session
@@ -84,13 +86,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   const signOut = async () => {
+    setSigningOut(true)
+    
+    // Show spinner for 2 seconds (reduced from 3.5)
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
     const { error } = await supabase.auth.signOut()
     if (error) throw error
+    
+    setSigningOut(false)
+    
+    // Redirect to login page immediately after successful logout
+    window.location.href = '/admin/login'
   }
 
   const value: AuthContextType = {
     user,
     loading,
+    signingOut,
     signIn,
     signUp,
     signInWithGoogle,
@@ -98,5 +111,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signOut,
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+      {/* Sign Out Loading Overlay */}
+      {signingOut && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[70]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-900 mx-auto mb-4"></div>
+            <p className="text-white">Signing out...</p>
+          </div>
+        </div>
+      )}
+    </AuthContext.Provider>
+  )
 }

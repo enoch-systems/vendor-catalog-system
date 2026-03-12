@@ -68,7 +68,7 @@ export const Carousel = ({ images, className }: CarouselProps) => {
                                     </p>
                                     <div className="flex gap-3 justify-center">
                                         <Link href="/shop">
-                                            <button className="border border-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-black transition-colors">
+                                            <button className="border border-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-black transition-colors duration-300 cursor-pointer hover:scale-105 hover:shadow-lg">
                                                 Shop Wigs
                                             </button>
                                         </Link>
@@ -116,7 +116,7 @@ export const Carousel = ({ images, className }: CarouselProps) => {
                                     </p>
                                     <div className="flex gap-3 justify-center">
                                         <Link href="/shop">
-                                            <button className="border border-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-black transition-colors">
+                                            <button className="border border-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-black transition-colors duration-300 cursor-pointer hover:scale-105 hover:shadow-lg">
                                                 Shop Wigs
                                             </button>
                                         </Link>

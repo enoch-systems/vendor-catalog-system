@@ -38,9 +38,16 @@ const AdminProducts = () => {
   const [isDeletingProduct, setIsDeletingProduct] = useState(false);
   const itemsPerPage = 10;
 
-  const { user, signOut } = useAuth();
+  const { user, signOut, loading: authLoading } = useAuth();
   const currentPath = '/admin/products';
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      window.location.href = '/admin/login';
+    }
+  }, [user, authLoading]);
 
   const menuItems = [
     { href: '/admin/products', label: 'Products', icon: ShoppingBag },
@@ -392,7 +399,7 @@ const AdminProducts = () => {
 
             <button
               onClick={() => setShowAddModal(true)}
-              className="flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors w-full sm:w-auto lg:mb-10"
+              className="flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors w-full sm:w-auto lg:mb-10 cursor-pointer"
             >
               <Plus size={16} className="mr-2" />
               Add Product
@@ -405,7 +412,7 @@ const AdminProducts = () => {
               <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors"
+                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
               >
                 Prev
               </button>
@@ -416,7 +423,7 @@ const AdminProducts = () => {
                   <button
                     key={`top-${pageNumber}`}
                     onClick={() => setCurrentPage(pageNumber)}
-                    className={`px-3 py-2 text-sm rounded-lg transition-colors ${
+                    className={`px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
                       currentPage === pageNumber
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-700 hover:bg-gray-600 text-white'
@@ -430,7 +437,7 @@ const AdminProducts = () => {
               <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors"
+                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
               >
                 Next
               </button>
@@ -542,7 +549,7 @@ const AdminProducts = () => {
                       e.stopPropagation();
                       handleEditProduct(product);
                     }}
-                    className="px-3 py-2 bg-transparent border border-amber-800 hover:bg-amber-800 text-amber-800 hover:text-white rounded-lg transition-all duration-200 hover:scale-105 flex items-center justify-center gap-2 w-full"
+                    className="px-3 py-2 bg-transparent border border-amber-800 hover:bg-amber-800 text-amber-800 hover:text-white rounded-lg transition-all duration-200 hover:scale-105 flex items-center justify-center gap-2 w-full cursor-pointer"
                   >
                     <Edit size={14} />
                     <span className="text-xs font-medium">Edit</span>
@@ -568,7 +575,7 @@ const AdminProducts = () => {
               <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors"
+                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
               >
                 Prev
               </button>
@@ -580,7 +587,7 @@ const AdminProducts = () => {
                   <button
                     key={pageNumber}
                     onClick={() => setCurrentPage(pageNumber)}
-                    className={`px-3 py-2 text-sm rounded-lg transition-colors ${
+                    className={`px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
                       currentPage === pageNumber
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-700 hover:bg-gray-600 text-white'
@@ -595,7 +602,7 @@ const AdminProducts = () => {
               <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors"
+                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
               >
                 Next
               </button>

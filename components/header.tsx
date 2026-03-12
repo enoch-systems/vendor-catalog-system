@@ -6,6 +6,7 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import { useCart } from './cart-context'
 import { useUI } from '@/contexts/ui-context'
+import { useAuth } from '@/contexts/auth-context'
 
 type ProfileDropdownItem = {
     name?: string;
@@ -18,6 +19,7 @@ type ProfileDropdownItem = {
 
 export const HeroHeader = () => {
     const { profileDropdownOpen, setProfileDropdownOpen, mobileMenuOpen, setMobileMenuOpen } = useUI()
+    const { user } = useAuth()
     const [isScrolled, setIsScrolled] = React.useState(false)
     const { cartCount } = useCart()
     const dropdownRef = React.useRef<HTMLDivElement>(null)
@@ -37,7 +39,7 @@ export const HeroHeader = () => {
         { name: 'Shop Wigs', href: '/shop', icon: ShoppingBag },
         { name: 'Check out', href: '/checkout', icon: CreditCard },
         { name: 'Help', href: '/help', icon: HelpCircle },
-        { name: 'My Account', href: '/admin/products', icon: User, customIcon: '/avatar.jpeg' },
+        ...(user ? [{ name: 'My Account', href: '/admin/products', icon: User, customIcon: '/avatar.jpeg' }] : [])
     ]
 
     const desktopMenuItems: MenuItem[] = [
@@ -191,7 +193,7 @@ export const HeroHeader = () => {
                                                 ) : (
                                                     <item.icon className="size-5 text-amber-100" />
                                                 )}
-                                                <span className={`border-b ${item.name === 'My Account' ? 'border-amber-100/60 text-left' : 'border-gray-500/20'} font-normal`}>{item.name}</span>
+                                                <span className={`font-normal ${item.name === 'My Account' ? 'text-left' : ''}`}>{item.name}</span>
                                                 {item.name === 'My Account' && <ChevronDown className="size-4 ml-2" />}
                                             </Link>
                                         </li>
