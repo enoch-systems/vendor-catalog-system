@@ -20,7 +20,6 @@ import {
 } from 'lucide-react';
 import { ConfirmationModal } from '@/components/ui/confirmation-modal';
 import { Product, getAllProducts } from '@/lib/products';
-import { AdminLayout } from '@/components/admin/admin-layout';
 import { useAuth } from '@/contexts/auth-context';
 
 import EditProductModal from './EditProductModal';
@@ -41,10 +40,10 @@ const AdminProducts = () => {
 
   const { user, signOut } = useAuth();
   const currentPath = '/admin/products';
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const menuItems = [
     { href: '/admin/products', label: 'Products', icon: ShoppingBag },
-    { href: '/admin/settings', label: 'Settings', icon: SettingsIcon },
   ];
   
   // Load products on mount
@@ -89,6 +88,20 @@ const AdminProducts = () => {
   // Scroll to top smoothly on mount
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   // Filter products based on search
@@ -228,7 +241,7 @@ const AdminProducts = () => {
   };
 
   return (
-    <AdminLayout currentPath="/admin/products">
+    <div className="min-h-screen bg-gray-900">
       {/* Deleting Overlay */}
       {isDeletingProduct && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[70]">
@@ -240,7 +253,7 @@ const AdminProducts = () => {
       )}
       {/* Header */}
       <header className="bg-gray-800 border-b border-gray-700 fixed top-0 left-0 right-0 z-40">
-        <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMenuOpen(true)}
@@ -259,12 +272,12 @@ const AdminProducts = () => {
           <div className="flex items-center space-x-4">
 
             {/* Profile Dropdown */}
-            <div className="relative profile-dropdown">
+            <div className="relative profile-dropdown" ref={dropdownRef}>
               <button
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                 className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition-colors"
               >
-                <img src="/avatar_default.png" alt="Profile" className="w-8 h-8 rounded-full object-cover" />
+                <img src="/avatar.jpeg" alt="Profile" className="w-8 h-8 rounded-full object-cover" />
                 <ChevronDown size={16} className="text-gray-300" />
               </button>
 
@@ -273,14 +286,6 @@ const AdminProducts = () => {
                   <div className="px-4 py-3 border-b border-gray-700">
                     <p className="text-gray-600 font-medium truncate">{user?.email || 'No email'}</p>
                   </div>
-                  <Link
-                    href="/admin/settings"
-                    className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
-                    onClick={() => setProfileDropdownOpen(false)}
-                  >
-                    <SettingsIcon size={16} className="mr-3" />
-                    <span>Account Settings</span>
-                  </Link>
                   <Link
                     href="#"
                     className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
@@ -358,37 +363,39 @@ const AdminProducts = () => {
       </div>
 
       {/* Main Content */}
-      <main className="pt-2 p-0 pb-20">
+      <main className="pt-16 px-2 sm:px-4 lg:px-6 pb-20">
         {/* Page Header */}
-        <div className="mb-8 pt-4">
-          <h1 className="text-3xl font-semibold text-white mb-2 pt-8">Products Management</h1>
-          <p className="text-gray-400">Manage your product catalog - add, edit, and remove products</p>
+        <div className="mb-6 pt-4 px-2 sm:px-0 text-center">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-white mb-2 pt-6 sm:pt-8">Products Management</h1>
+          <p className="text-gray-400 text-sm sm:text-base">Manage your product catalog - add, edit, and remove products</p>
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
-            />
-          </div>
+        <div className="flex flex-col gap-3 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3">
+            <div className="relative w-full sm:flex-1 sm:max-w-md lg:mb-10">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+              />
+            </div>
 
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors mb-7"
-          >
-            <Plus size={16} className="mr-2" />
-            Add Product
-          </button>
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors w-full sm:w-auto lg:mb-10"
+            >
+              <Plus size={16} className="mr-2" />
+              Add Product
+            </button>
+          </div>
 
           {/* Top Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center space-x-2 flex-1">
+            <div className="flex items-center justify-center space-x-2">
               <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -436,9 +443,9 @@ const AdminProducts = () => {
         )}
 
         {/* Products Grid */}
-        {/* 2 columns on mobile, 3 on tablet, 4 on desktop for better card display */}
+        {/* 2 columns on mobile, 4 on tablet, 6 on desktop */}
         {!loading && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-6 max-w-8xl mx-auto lg:pr-20 lg:pl-20">
           {paginatedProducts.map((product) => (
             <div key={product.id} className="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden cursor-pointer" onClick={() => handleEditProduct(product)}>
               {/* Image Container */}
@@ -496,25 +503,25 @@ const AdminProducts = () => {
               </div>
 
               {/* Content */}
-              <div className="p-4">
-                <h3 className="text-white font-semibold text-sm leading-tight line-clamp-2 mb-2 group-hover:text-blue-400 transition-colors duration-200">
+              <div className="p-3 sm:p-4">
+                <h3 className="text-white font-semibold text-xs sm:text-sm leading-tight line-clamp-2 mb-2 group-hover:text-blue-400 transition-colors duration-200">
                   {product.name.charAt(0).toUpperCase() + product.name.slice(1).toLowerCase()}
                 </h3>
 
-                <div className="flex items-center justify-between">
-                  <div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold text-blue-400">
+                      <span className="text-base sm:text-lg font-bold text-blue-400">
                         {product.price}
                       </span>
                       {product.originalPrice && (
-                        <span className="text-sm text-gray-400 line-through">
+                        <span className="text-xs sm:text-sm text-gray-400 line-through">
                           {product.originalPrice}
                         </span>
                       )}
                     </div>
                     {product.inStock !== undefined && (
-                      <div className="flex items-center gap-1 mt-1">
+                      <div className="flex items-center gap-1">
                         <div className={`w-2 h-2 rounded-full ${product.inStock ? 'bg-green-500' : 'bg-red-500'} animate-pulse`}></div>
                         <span className={`text-xs ${product.inStock ? 'text-green-400' : 'text-red-400'} font-medium`}>
                           {product.inStock ? 'In Stock' : 'Out of Stock'}
@@ -529,7 +536,7 @@ const AdminProducts = () => {
                       e.stopPropagation();
                       handleEditProduct(product);
                     }}
-                    className="px-3 py-2 bg-transparent border border-amber-800 hover:bg-amber-800 text-amber-800 hover:text-white rounded-lg transition-all duration-200 hover:scale-105 flex items-center gap-2"
+                    className="px-3 py-2 bg-transparent border border-amber-800 hover:bg-amber-800 text-amber-800 hover:text-white rounded-lg transition-all duration-200 hover:scale-105 flex items-center justify-center gap-2 w-full"
                   >
                     <Edit size={14} />
                     <span className="text-xs font-medium">Edit</span>
@@ -625,7 +632,7 @@ const AdminProducts = () => {
         onCancel={cancelDelete}
         disabled={isDeletingProduct}
       />
-    </AdminLayout>
+    </div>
   );
 };
 
