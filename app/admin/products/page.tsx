@@ -281,6 +281,14 @@ const AdminProducts = () => {
                 <ChevronDown size={16} className="text-gray-300" />
               </button>
 
+              {/* Backdrop when dropdown is open */}
+              {profileDropdownOpen && (
+                <div
+                  className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+                  onClick={() => setProfileDropdownOpen(false)}
+                />
+              )}
+
               {profileDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50">
                   <Link
