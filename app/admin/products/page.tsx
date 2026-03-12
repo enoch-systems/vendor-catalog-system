@@ -284,7 +284,7 @@ const AdminProducts = () => {
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                 className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition-colors"
               >
-                <img src="/avatar.jpeg" alt="Profile" className="w-8 h-8 rounded-full object-cover" />
+                <Image src="/avatar.jpeg" alt="Profile" width={32} height={32} className="w-8 h-8 rounded-full object-cover" />
                 <ChevronDown size={16} className="text-gray-300" />
               </button>
 
@@ -410,9 +410,12 @@ const AdminProducts = () => {
           {totalPages > 1 && (
             <div className="flex items-center justify-center space-x-2">
               <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                onClick={() => {
+                  setCurrentPage(prev => Math.max(prev - 1, 1))
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
                 disabled={currentPage === 1}
-                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
               >
                 Prev
               </button>
@@ -422,8 +425,11 @@ const AdminProducts = () => {
                 return (
                   <button
                     key={`top-${pageNumber}`}
-                    onClick={() => setCurrentPage(pageNumber)}
-                    className={`px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
+                    onClick={() => {
+                      setCurrentPage(pageNumber)
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
+                    className={`px-4 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
                       currentPage === pageNumber
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-700 hover:bg-gray-600 text-white'
@@ -435,9 +441,12 @@ const AdminProducts = () => {
               })}
 
               <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                onClick={() => {
+                  setCurrentPage(prev => Math.min(prev + 1, totalPages))
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
                 disabled={currentPage === totalPages}
-                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
               >
                 Next
               </button>
@@ -464,13 +473,16 @@ const AdminProducts = () => {
               {/* Image Container */}
               <div className="relative h-48 overflow-hidden bg-gray-700">
                 {product.image ? (
-                  <img
+                  <Image
                     src={product.image}
                     alt={product.name}
+                    fill
                     className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${
                       !product.inStock ? 'brightness-50' : ''
                     }`}
-                    style={{ aspectRatio: '1/1', objectFit: 'cover' }}
+                    loading="lazy"
+                    quality={75}
+                    sizes="(max-width: 640px) 25vw, (max-width: 1024px) 17vw, 15vw"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-700">
@@ -569,13 +581,16 @@ const AdminProducts = () => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-8 mb-10">
             <div className="flex items-center space-x-2">
               {/* Previous Button */}
               <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                onClick={() => {
+                  setCurrentPage(prev => Math.max(prev - 1, 1))
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
                 disabled={currentPage === 1}
-                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
               >
                 Prev
               </button>
@@ -586,8 +601,11 @@ const AdminProducts = () => {
                 return (
                   <button
                     key={pageNumber}
-                    onClick={() => setCurrentPage(pageNumber)}
-                    className={`px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
+                    onClick={() => {
+                      setCurrentPage(pageNumber)
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
+                    className={`px-4 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
                       currentPage === pageNumber
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-700 hover:bg-gray-600 text-white'
@@ -600,9 +618,12 @@ const AdminProducts = () => {
 
               {/* Next Button */}
               <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                onClick={() => {
+                  setCurrentPage(prev => Math.min(prev + 1, totalPages))
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
                 disabled={currentPage === totalPages}
-                className="px-3 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors cursor-pointer"
               >
                 Next
               </button>

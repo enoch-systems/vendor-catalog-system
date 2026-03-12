@@ -3,8 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { ChevronDown, X, Upload, Bot, Plus, Edit, ArrowLeft } from 'lucide-react';
 import { Product } from '@/lib/products';
 import { descriptionTemplates } from './descriptionTemplates';

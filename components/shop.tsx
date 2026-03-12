@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Star, Search, Circle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { AnimatedGroup } from '@/components/ui/animated-group'
@@ -134,6 +135,11 @@ const Shop = () => {
         localStorage.setItem('selectedCategory', selectedCategory)
     }, [selectedCategory])
 
+    // Reset to page 1 when sort changes
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [selectedSort])
+
     // compute dropdown position whenever query changes or resize occurs
     useEffect(() => {
         if (!searchWrapperRef.current) return
@@ -175,9 +181,30 @@ const Shop = () => {
         return [...withBadge, ...withoutBadge]
     }
     
+    // Apply price sorting
+    const applySorting = (productsToSort: Product[]) => {
+        if (selectedSort === 'Price: Low to High') {
+            return [...productsToSort].sort((a, b) => {
+                const priceA = parseFloat(a.price?.toString().replace(/[^0-9.]/g, '') || '0')
+                const priceB = parseFloat(b.price?.toString().replace(/[^0-9.]/g, '') || '0')
+                return priceA - priceB
+            })
+        } else if (selectedSort === 'Price: High to Low') {
+            return [...productsToSort].sort((a, b) => {
+                const priceA = parseFloat(a.price?.toString().replace(/[^0-9.]/g, '') || '0')
+                const priceB = parseFloat(b.price?.toString().replace(/[^0-9.]/g, '') || '0')
+                return priceB - priceA
+            })
+        }
+        // Default: return as is (badges already sorted to top)
+        return productsToSort
+    }
+    
     const sortedProducts = sortProductsByBadge(products)
-    const filteredProducts = sortedProducts.filter(product => 
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredProducts = applySorting(
+        sortedProducts.filter(product => 
+            product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
     )
     const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct)
     const displayedProducts = currentProducts
@@ -360,41 +387,6 @@ const Shop = () => {
                         {/* Filters */}
                         <AnimatedGroup variants={transitionVariants}>
                             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 gap-4">
-                                {/* Categories */}
-                                <div className="lg:hidden">
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-sm text-gray-600 whitespace-nowrap">By Type:</span>
-                                        <select
-                                            value={selectedCategory}
-                                            onChange={(e) => setSelectedCategory(e.target.value)}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-900 focus:border-transparent text-gray-500 cursor-pointer"
-                                        >
-                                            {categories.map((category) => (
-                                                <option key={category} value={category}>
-                                                    {category}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-
-                                {/* Desktop Categories */}
-                                <div className="hidden lg:flex flex-wrap gap-2">
-                                    {categories.map((category) => (
-                                        <button
-                                            key={category}
-                                            onClick={() => setSelectedCategory(category)}
-                                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer${
-                                                selectedCategory === category
-                                                    ? 'bg-amber-700 text-yellow-600'
-                                                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                                            }`}
-                                        >
-                                            {category}
-                                        </button>
-                                    ))}
-                                </div>
-
                                 {/* Sort Options */}
                                 <div className="flex items-center gap-2">
                                     <span className="text-sm text-gray-600 whitespace-nowrap">By Price:</span>
@@ -417,9 +409,12 @@ const Shop = () => {
                         <AnimatedGroup variants={transitionVariants}>
                             <div className="flex items-center justify-center space-x-2 mt-4 mb-7">
                                 <button
-                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                    onClick={() => {
+                                        setCurrentPage(prev => Math.max(prev - 1, 1))
+                                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                                    }}
                                     disabled={currentPage === 1}
-                                    className="px-3 py-2 text-sm bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
+                                    className="px-4 py-2 text-sm bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
                                 >
                                     Prev
                                 </button>
@@ -429,8 +424,11 @@ const Shop = () => {
                                     return (
                                         <button
                                             key={`top-${pageNumber}`}
-                                            onClick={() => setCurrentPage(pageNumber)}
-                                            className={`px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
+                                            onClick={() => {
+                                                setCurrentPage(pageNumber)
+                                                window.scrollTo({ top: 0, behavior: 'smooth' })
+                                            }}
+                                            className={`px-4 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
                                                 currentPage === pageNumber
                                                     ? 'bg-amber-900 text-white border border-amber-900 hover:bg-amber-800'
                                                     : 'bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400'
@@ -442,9 +440,12 @@ const Shop = () => {
                                 })}
 
                                 <button
-                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                    onClick={() => {
+                                        setCurrentPage(prev => Math.min(prev + 1, totalPages))
+                                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                                    }}
                                     disabled={currentPage === totalPages}
-                                    className="px-3 py-2 text-sm bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
+                                    className="px-4 py-2 text-sm bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
                                 >
                                     Next
                                 </button>
@@ -487,12 +488,16 @@ const Shop = () => {
                                         {/* Product Image */}
                                         <div className="relative overflow-hidden rounded-t-lg h-48 sm:h-56">
                                             {product.image ? (
-                                                <img
+                                                <Image
                                                     src={product.image}
                                                     alt={product.name}
+                                                    width={300}
+                                                    height={300}
                                                     className={`w-full h-48 sm:h-56 object-cover transition-transform duration-300 ${
                                                         !product.inStock ? 'brightness-50' : ''
                                                     }`}
+                                                    loading="lazy"
+                                                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                                                 />
                                             ) : (
                                                 <div className="w-full h-48 sm:h-56 flex items-center justify-center bg-gray-200">
@@ -580,9 +585,12 @@ const Shop = () => {
 
                         {/* Pagination */}
                         <AnimatedGroup variants={transitionVariants}>
-                            <div className="flex items-center justify-center space-x-2 mt-8">
+                            <div className="flex items-center justify-center space-x-2 mt-8 mb-10">
                                 <button
-                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                    onClick={() => {
+                                        setCurrentPage(prev => Math.max(prev - 1, 1))
+                                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                                    }}
                                     disabled={currentPage === 1}
                                     className="px-3 py-2 text-sm bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
                                 >
@@ -594,8 +602,11 @@ const Shop = () => {
                                     return (
                                         <button
                                             key={pageNumber}
-                                            onClick={() => setCurrentPage(pageNumber)}
-                                            className={`px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
+                                            onClick={() => {
+                                                setCurrentPage(pageNumber)
+                                                window.scrollTo({ top: 0, behavior: 'smooth' })
+                                            }}
+                                            className={`px-4 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
                                                 currentPage === pageNumber
                                                     ? 'bg-amber-900 text-white border border-amber-900 hover:bg-amber-800'
                                                     : 'bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400'
@@ -607,7 +618,10 @@ const Shop = () => {
                                 })}
 
                                 <button
-                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                    onClick={() => {
+                                        setCurrentPage(prev => Math.min(prev + 1, totalPages))
+                                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                                    }}
                                     disabled={currentPage === totalPages}
                                     className="px-3 py-2 text-sm bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
                                 >

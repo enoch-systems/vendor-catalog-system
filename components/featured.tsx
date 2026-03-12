@@ -24,8 +24,11 @@ const Featured = ({ initialProducts = [] }: FeaturedProps) => {
     // fetch on client only if we weren't provided products already
     React.useEffect(() => {
         if (initialProducts.length > 0) {
-            // server already supplied data, sort by badge and use immediately
-            const sortedProducts = sortProductsByBadge(initialProducts)
+            // server already supplied data, get ALL badged products (up to 4) first, then fill with newest non-badged
+            const badgedProducts = initialProducts.filter(p => p.badge).slice(0, 4)
+            const remainingSlots = 8 - badgedProducts.length
+            const nonBadgedProducts = initialProducts.filter(p => !p.badge).slice(-remainingSlots)
+            const sortedProducts = [...badgedProducts, ...nonBadgedProducts]
             setFeaturedProducts(sortedProducts)
             setIsLoading(false)
             localStorage.setItem('featuredProducts', JSON.stringify(sortedProducts))
@@ -48,8 +51,11 @@ const Featured = ({ initialProducts = [] }: FeaturedProps) => {
             try {
                 const products = await getAllProducts()
                 console.log('featured load', products)
-                // Sort by badge status, then pick first 4 for featured
-                const sortedProducts = sortProductsByBadge(products).slice(0, 4)
+                // Get ALL products with badges (up to 4), then fill remaining slots with newest non-badged products
+                const badgedProducts = products.filter(p => p.badge).slice(0, 4)
+                const remainingSlots = 8 - badgedProducts.length
+                const nonBadgedProducts = products.filter(p => !p.badge).slice(-remainingSlots)
+                const sortedProducts = [...badgedProducts, ...nonBadgedProducts]
                 setFeaturedProducts(sortedProducts)
                 localStorage.setItem('featuredProducts', JSON.stringify(sortedProducts))
             } catch (err) {
@@ -68,7 +74,10 @@ const Featured = ({ initialProducts = [] }: FeaturedProps) => {
             const loadProducts = async () => {
                 try {
                     const products = await getAllProducts()
-                    const sortedProducts = sortProductsByBadge(products).slice(0, 4)
+                    const badgedProducts = products.filter(p => p.badge).slice(0, 4)
+                    const remainingSlots = 8 - badgedProducts.length
+                    const nonBadgedProducts = products.filter(p => !p.badge).slice(-remainingSlots)
+                    const sortedProducts = [...badgedProducts, ...nonBadgedProducts]
                     setFeaturedProducts(sortedProducts)
                     localStorage.setItem('featuredProducts', JSON.stringify(sortedProducts))
                 } catch (err) {
@@ -82,7 +91,10 @@ const Featured = ({ initialProducts = [] }: FeaturedProps) => {
             const loadProducts = async () => {
                 try {
                     const products = await getAllProducts()
-                    const sortedProducts = sortProductsByBadge(products).slice(0, 4)
+                    const badgedProducts = products.filter(p => p.badge).slice(0, 4)
+                    const remainingSlots = 8 - badgedProducts.length
+                    const nonBadgedProducts = products.filter(p => !p.badge).slice(-remainingSlots)
+                    const sortedProducts = [...badgedProducts, ...nonBadgedProducts]
                     setFeaturedProducts(sortedProducts)
                     localStorage.setItem('featuredProducts', JSON.stringify(sortedProducts))
                 } catch (err) {
@@ -183,10 +195,10 @@ const Featured = ({ initialProducts = [] }: FeaturedProps) => {
 
                 {/* Products Grid - 2 cols on mobile, 3 on tablet, 4 on desktop */}
                 {isLoading ? (
-                    // skeleton loading while products fetch
+                    // skeleton loading while products fetch - 8 items instead of 4
                     <AnimatedGroup variants={transitionVariants}>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
-                            {Array.from({ length: 4 }).map((_, i) => (
+                            {Array.from({ length: 8 }).map((_, i) => (
                                 <div
                                     key={i}
                                     className="bg-gray-100 animate-pulse h-64 rounded-lg"

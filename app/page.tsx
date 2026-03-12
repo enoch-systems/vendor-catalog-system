@@ -6,7 +6,11 @@ export default async function Home() {
   let featured: Product[] = []
   try {
     const products = await getAllProducts()
-    featured = products.slice(0, 8)
+    // Get ALL badged products (up to 4) first, then fill remaining slots with newest non-badged
+    const badgedProducts = products.filter(p => p.badge).slice(0, 4)
+    const remainingSlots = 8 - badgedProducts.length
+    const nonBadgedProducts = products.filter(p => !p.badge).slice(-remainingSlots)
+    featured = [...badgedProducts, ...nonBadgedProducts]
   } catch (err) {
     console.error('Error loading products for home page', err)
   }

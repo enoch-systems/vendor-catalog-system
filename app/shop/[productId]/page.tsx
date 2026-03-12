@@ -301,7 +301,7 @@ export default function DynamicProductPage({ params }: { params: Promise<{ produ
                                     )}
                                     {!product.inStock && (
                                         <div className="absolute top-4 right-4">
-                                            <img src="/soldout.png" alt="Sold Out" className="h-16 w-16 object-contain" />
+                                            <Image src="/soldout.png" alt="Sold Out" width={64} height={64} className="h-16 w-16 object-contain" />
                                         </div>
                                     )}
                                 </div>
