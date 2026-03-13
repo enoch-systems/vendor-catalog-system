@@ -1,30 +1,17 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
-import { ChevronsUpDown, ChevronDown } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import React from 'react'
 
-const links = [
-    {
-        group: 'Product',
-        items: [
-            {
-                title: 'Wigs',
-                href: '/shop',
-            },
-            {
-                title: 'Customer Support',
-                href: '#',
-            },
-        ],
-    },
-   
-   
-]
+interface FooterLink {
+  group: string
+  items: { href: string; title: string }[]
+}
+
+const links: FooterLink[] = []
 
 export default function Footer() {
     const [showComingSoon, setShowComingSoon] = React.useState('')
@@ -50,12 +37,12 @@ export default function Footer() {
                             onClick={(e) => {
                                 e.preventDefault()
                                 window.scrollTo({ top: 0, behavior: 'smooth' })
-                                window.location.reload()
                             }}
-                            aria-label="go home"
-                            className="flex items-center space-x-2 cursor-pointer">
-                            <img src="/wig.png" alt="Logo" className="h-8 w-auto object-contain" />
-                            <span className="text-sm font-semibold">Wigga</span>
+                            aria-label="go home">
+                            <div className="flex items-center space-x-2 cursor-pointer">
+                                <Image src="/wig.png" alt="Logo" width={32} height={32} className="h-8 w-auto object-contain" />
+                                <span className="text-sm font-semibold">Wigga</span>
+                            </div>
                         </Link>
                         <div className="flex flex-wrap justify-center gap-6 text-sm">
                             <button
@@ -144,31 +131,27 @@ export default function Footer() {
                         </div>
                     </div>
                     <div className="mt-12 flex flex-wrap items-end justify-between gap-6 border-t py-6">
-                        <Link
-                            href="#"
+                        <button
                             onClick={(e) => {
                                 e.preventDefault();
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
-                            className="text-muted-foreground hover:text-primary text-sm">
+                            className="text-muted-foreground hover:text-primary text-sm bg-none border-none cursor-pointer p-0">
                             Back to top 
-                        </Link>
+                        </button>
                         <small className="text-muted-foreground order-last block text-center text-sm md:order-first">© {new Date().getFullYear()} Wigga. All rights reserved</small>
-                        <form action="">
-                            <div className="relative">
-                                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 pointer-events-none" />
-                               <select
-                                    className={cn(
-                                        'border-input file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground shadow-xs flex h-9 w-full min-w-32 appearance-none rounded-md border bg-transparent px-3 py-1 text-base outline-none transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-                                        'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
-                                        'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive'
-                                    )}
-                                    name="language">
-                                    <option value="1">English</option>
-                                </select>
-                              
-                            </div>
-                        </form>
+                        <div className="relative">
+                            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 pointer-events-none" />
+                            <select
+                                className={cn(
+                                    'border-input file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground shadow-xs flex h-9 w-full min-w-32 appearance-none rounded-md border bg-transparent px-3 py-1 text-base outline-none transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+                                    'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+                                    'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive'
+                                )}
+                                name="language">
+                                <option value="1">English</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </footer>

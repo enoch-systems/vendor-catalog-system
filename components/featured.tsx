@@ -17,7 +17,6 @@ interface FeaturedProps {
 const Featured = ({ initialProducts = [] }: FeaturedProps) => {
     const { addToCart } = useCart()
     const [addedToCart, setAddedToCart] = useState<Set<string>>(new Set())
-    const [isClient, setIsClient] = useState(false)
     // initialize state from props to avoid loading lag
     const [featuredProducts, setFeaturedProducts] = useState<Product[]>(initialProducts)
     const [isLoading, setIsLoading] = useState(initialProducts.length === 0)
@@ -68,11 +67,6 @@ const Featured = ({ initialProducts = [] }: FeaturedProps) => {
         }
         loadProducts()
     }, [initialProducts])
-
-    // Set isClient to true after mount
-    React.useEffect(() => {
-        setIsClient(true)
-    }, [])
 
     // Listen for product updates from admin page
     React.useEffect(() => {
@@ -312,7 +306,7 @@ const Featured = ({ initialProducts = [] }: FeaturedProps) => {
                                         {product.inStock ? (
                                             <Button 
                                                 className={`w-full text-xs py-1.5 sm:text-sm sm:py-2 transition-colors ${
-                                                    isClient && addedToCart.has(product.id)
+                                                    addedToCart.has(product.id)
                                                         ? 'bg-green-500 text-white hover:bg-green-600'
                                                         : 'bg-transparent text-black hover:bg-amber-100 border border-gray-200 shadow-sm hover:shadow-md'
                                                 }`}
@@ -321,7 +315,7 @@ const Featured = ({ initialProducts = [] }: FeaturedProps) => {
                                                     handleAddToCart(product)
                                                 }}
                                             >
-                                                {isClient && addedToCart.has(product.id) ? 'Added!' : 'Add to Cart'}
+                                                {addedToCart.has(product.id) ? 'Added!' : 'Add to Cart'}
                                             </Button>
                                         ) : (
                                             <Button disabled className="w-full text-xs py-1.5 sm:text-sm sm:py-2 bg-gray-300 text-gray-500">

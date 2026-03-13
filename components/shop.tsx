@@ -166,7 +166,28 @@ const Shop = () => {
         return () => window.removeEventListener('resize', handler)
     }, [])
 
-    const productsPerPage = 10
+    const [productsPerPage, setProductsPerPage] = useState(12)
+    const [isMobile, setIsMobile] = useState(false)
+    const productsPerPageRef = useRef(productsPerPage)
+
+    // Update products per page based on screen size
+    useEffect(() => {
+        const checkMobile = () => {
+            const mobile = window.innerWidth < 768
+            const newProductsPerPage = mobile ? 10 : 12
+            
+            if (newProductsPerPage !== productsPerPageRef.current) {
+                productsPerPageRef.current = newProductsPerPage
+                setProductsPerPage(newProductsPerPage)
+                setCurrentPage(1) // Reset to first page when products per page changes
+            }
+            setIsMobile(mobile)
+        }
+
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+        return () => window.removeEventListener('resize', checkMobile)
+    }, [])
     const sortOptions = ['Default', 'Price: Low to High', 'Price: High to Low']
     const categories = ['All', 'Lace', 'Human Hair', 'Curly', 'Straight', 'Colored']
 

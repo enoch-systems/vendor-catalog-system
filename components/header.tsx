@@ -107,6 +107,10 @@ export const HeroHeader = () => {
                         <div className="flex w-full justify-between lg:w-auto">
                             <Link
                                 href="/"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                                }}
                                 aria-label="home"
                                 className={cn("flex items-center space-x-2", mobileMenuOpen && "hidden")}>
                                 <Image src="/wig.png" alt="Logo" width={32} height={32} className="h-8 w-auto object-contain" />
@@ -176,7 +180,7 @@ export const HeroHeader = () => {
 
                         <div ref={mobileMenuRef} data-state={mobileMenuOpen ? 'active' : ''} className="fixed z-50 right-0 top-0 h-screen w-64 bg-slate-800 transform translate-x-full transition-transform duration-1000 data-[state=active]:translate-x-0 lg:hidden">
                             <div className="p-6">
-                                <Link href="/" onClick={() => setMobileMenuOpen(false)} className="mb-6 flex items-center space-x-2">
+                                <Link href="/" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setMobileMenuOpen(false); }} className="mb-6 flex items-center space-x-2">
                                     <Image src="/wig.png" alt="Logo" width={32} height={32} className="h-8 w-auto object-contain" />
                                     <span className="text-lg font-semibold text-white">Wigga</span>
                                 </Link>
